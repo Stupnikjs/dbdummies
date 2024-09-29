@@ -1,3 +1,32 @@
+@font-face {
+    font-family: 'voltaire'; /* Choose a name for your font */
+    src: url('../fonts/Voltaire-Regular.ttf') format('woff');
+    /*src: url('../fonts/Roboto-Regular.ttf') format('woff');*/
+    /* You can include additional formats as needed */
+  }
+
+
+
 body {
-    background-color: rgb(204, 160, 160);
+    
+    font-family: voltaire;
 }
+
+.grid-section{
+    display: grid;
+    grid-template-columns: 30% 1fr 30%;
+    background-color: rgb(230, 190, 190);
+  }
+  
+  .padding-grid {
+    flex: 1; 
+    width: 20%;
+    height: max-content;
+    
+  }
+
+.template {
+    padding: 1rem;
+    background-color: aliceblue
+}
+  

@@ -5,9 +5,31 @@
     <h1> DBDummie </h1>
     <p> Hello, this aint a tutorial about databases </p>
     <p> This is just me trying to implement my own database without any deep knowledge about how it works </p> 
-    <p> This might be really bad, but i think this can help somme of u catching up my thinking process, 
-<p> by the way, my english my be disturbing, sorry about that, it was built on top of sitcoms and web dev tutorials, what would you expect
+    <p> 
+        This might be really bad, but i think this can help somme of u catching up my thinking process, 
+        maybe you know how to launch an instance of a fancy powerfull postgres, but this might not tell you why 
+        postgres is the way it is, or why RockDB is this way.
+     </p>
+    
+<p> 
+    by the way, my english my be disturbing, sorry about that, it was built on top of sitcoms and web dev tutorials, what would you expect
 </p> 
+<p>
+    i chosed zig to implement this project because i wanted to learn it and i think a c like language is well suited for database engine
+</p>
+    <h2> First im designing a key value store database </h2>
+    <p> the command parser here is simple enougth so i could build it </p>
+    <p> 
+        the most intersting commes with the storage engine, 
+        i built it at first with singleton architecture by total lazyness, 
+        my goal is to store key string plus position of the value in the db file (start and end)
+        so to parse the key im gonna have to read the whole header file to find key and the value location and then
+        read the db file.  
+    </p>
+
+    <div>
+        <a href="#"> Key/val DB </a>
+    </div>
 
 
     
