@@ -26,7 +26,13 @@
         so to parse the key im gonna have to read the whole header file to find key and the value location and then
         read the db file.  
     </p>
-
+<p> when i call the set method i write 24bytes to the header: <ul>
+<li> the key 8bytes </li>
+<li> the start of value 8bytes (or u64)</li>
+<li> </li>
+</ul> 
+    <p> so the Key max lenght is 8bytes </p>
+    <p> the max dbfile lenght is max_u64 </p>
     <div>
         <a href="#"> Key/val DB </a>
     </div>
