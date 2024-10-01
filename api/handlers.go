@@ -35,3 +35,9 @@ func (app *Application) RenderAccueil(w http.ResponseWriter, r *http.Request) {
 	td.Data = make(map[string]any)
 	_ = render(w, r, "/new.gohtml", &td)
 }
+func (app *Application) RenderKeyVal(w http.ResponseWriter, r *http.Request) {
+
+	td := TemplateData{}
+	td.Data = make(map[string]any)
+	_ = render(w, r, "/keyval.gohtml", &td)
+}

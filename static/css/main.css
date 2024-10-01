@@ -27,6 +27,9 @@ body {
 
 .template {
     padding: 1rem;
-    background-color: aliceblue
 }
-  
+
+code > pre {
+  font-size: .7rem;
+  background-color: grey;
+}

@@ -1,0 +1,107 @@
+{{template "base" .}}
+
+{{define "content"}}
+
+<p>
+    I choosed a key value store db because it was the simplest database i could think of 
+    first i implemented a parser that take the input and convert it into a database operation, 
+    this is my first try, im just gonna implement the simplest architecture i could have think of 
+ </p>
+
+ <p>
+    i just implemented 3 commands set get and del, those are selfexplanatory, 
+    i use 
+ </p>
+    <p> 
+        the most intersting commes with the storage engine, 
+        i built it at first with singleton architecture by total lazyness, 
+        my goal is to store key string plus position of the value in the db file (start and end)
+        so to parse the key im gonna have to read the whole header file to find key and the value location and then
+        read the db file.  
+    </p>
+<p> when i call the set method i write 24bytes to the header: <ul>
+<li> the key 8bytes </li>
+<li> the start of value 8bytes (or u64)</li>
+<li> </li>
+</ul> 
+    <p> so the Key max length is 8bytes </p>
+    <p> the max dbfile length is max_u64 </p>
+
+
+ <p>
+    
+
+ </p>
+
+<code>
+<pre>
+   
+        pub fn set(self: *StorageEngine, key: []const u8, value: []const u8) !void {
+            try self.parseHeaderFile();
+            if (util.stringInArr(key, self.map.keys())) return commandError.keyAlreadyExist;
+            var dir = try self.openStoreDir();
+            var headerFile = try dir.openFile(self.headerFileName, .{ .mode = .read_write });
+            var dbFile = try dir.openFile(self.dbFileName, .{ .mode = .read_write });
+
+            // fill the key to its 8 bytes
+            const paddedKey = try paddKey(key);
+            const header_stat = try headerFile.stat();
+            const db_stat = try dbFile.stat();
+
+            // point to the end of the file
+            try headerFile.seekTo(header_stat.size);
+            const start = db_stat.size; // start of the file in dbfile
+
+            _ = try headerFile.writer().write(paddedKey);
+            _ = try headerFile.write(&u64toBytes(start));
+            _ = try headerFile.write(&u64toBytes(value.len));
+
+            try dbFile.seekTo(db_stat.size);
+            _ = try dbFile.write(value);
+            const arr = [2]u64{ start, value.len };
+            try self.map.put(key, arr);
+            headerFile.close();
+            dbFile.close();
+        }
+
+        pub fn get(self: *StorageEngine, key: []const u8) ![]u8 {
+            try self.parseHeaderFile();
+            const coord = self.map.get(key).?;
+            var dir = try self.openStoreDir();
+            var file = try dir.openFile(self.dbFileName, .{ .mode = .read_only });
+            var buffer: [1024]u8 = undefined;
+            _ = try file.reader().readAll(&buffer);
+            return buffer[coord[0] .. coord[0] + coord[1]];
+        }
+
+        pub fn parseHeaderFile(self: *StorageEngine) !void {
+            var dir = try self.openStoreDir();
+            var file = try dir.openFile(self.headerFileName, .{ .mode = .read_only });
+
+            var buffer: [24]u8 = undefined;
+            var start: [8]u8 = undefined;
+            var len: [8]u8 = undefined;
+            var key: []const u8 = undefined;
+            var coord: [2]u64 = [2]u64{ 0, 0 };
+            while (true) {
+                const size = try file.read(&buffer);
+                if (size == 0) break;
+                key = try removePadding(buffer[0..8]);
+                start = buffer[8..16].*;
+                len = buffer[16..].*;
+                coord[0] = util.bytesToU64LE(start);
+                coord[1] = util.bytesToU64LE(len);
+
+                if (!util.stringInArr(key, self.map.keys())) try self.map.put(key, coord) else {
+                    continue;
+                }
+                coord = undefined;
+                buffer = undefined;
+                start = undefined;
+                len = undefined;
+            }
+        }
+    };
+</pre>
+</code>
+{{end}}
