@@ -29,7 +29,23 @@
 
 
  <p>
-    
+    The header will store the key wich is max 8bytes for less u have a padding func with 0
+    Then the 8 next bytes store the start of the value stored in the db file 
+    Then the last bytes store the value len 
+ </p>
+
+ <p> 
+   The header will be parsed by a storageEngine funciton that will put it in memory within a HashMap 
+ </p>
+
+ <p> 
+  At this point we can see this is already hightly ineficient, but wait for the delete part  
+ </p>
+
+ <p>
+    The delete method has to read the header file, then rewrite it to a newheaderfile ignoring the deleted one, 
+    whe have to remove it also from the hash map, and then from .. the db file. this is where its really painfull since 
+    we would need to rewrite the whole file, because we cant simply delete the bytes since data is store after each other in this architecture.
 
  </p>
 
